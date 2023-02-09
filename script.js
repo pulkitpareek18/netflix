@@ -36,7 +36,7 @@ function fetchAndShow() {
           let info = "";
 
           if (result.qid === "movie" && result.i) {
-            image = `<a onClick="return setVideo(this)" isWebSeries="false" class="links" IMDB="${result.id}" href="https://www.2embed.to/embed/imdb/movie?id=${result.id}" target="_blank">
+            image = `<a onClick="return setVideo(this)" isWebSeries="false" title="${result.l}"  class="links" IMDB="${result.id}" href="https://www.2embed.to/embed/imdb/movie?id=${result.id}" target="_blank">
                     <img src="${result.i.imageUrl}">
                   </a>`;
             info = `
@@ -46,7 +46,7 @@ function fetchAndShow() {
             </div>
           `;
           } else if (result.qid === "tvSeries" && result.i) {
-            image = `<a onClick="return setVideo(this)" IMDB="${result.id}" isWebSeries="true" class="links" href="https://www.2embed.to/embed/imdb/tv?id=${result.id}&s=1&e=1" target="_blank">
+            image = `<a onClick="return setVideo(this)" IMDB="${result.id}" title="${result.l}" isWebSeries="true" class="links" href="https://www.2embed.to/embed/imdb/tv?id=${result.id}&s=1&e=1" target="_blank">
                     <img src="${result.i.imageUrl}">
                   </a>`;
             info = `
@@ -87,7 +87,6 @@ function episodeHighlight(cssidentification = "s1e1") {
 
 function setVideo(element) {
   const iframe = document.getElementById("iframe");
-  console.log("sdlhg");
   iframe.src = element.getAttribute("href");
   iframe.style.display = "block";
   const webSeriesData = document.getElementById("webSeriesData");
@@ -96,12 +95,17 @@ function setVideo(element) {
   Pace.restart();
   scrollToTop();
 
+  
+  if(element.getAttribute("title") !== ""){
+    document.title = element.getAttribute("title")
+    console.log(element.getAttribute("title"))
+  }
+
   if (element.className.includes("episode")) {
     episodeHighlight(element.getAttribute("cssidentification"))
   }
 
   if (element.getAttribute("isWebSeries") == "true") {
-    console.log("ghus gya");
     async function printEpisodes() {
       // First, get the show's TMDB id based on its IMDb id
       const response = await fetch(
