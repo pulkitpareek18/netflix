@@ -14,7 +14,7 @@ const resultsContainer = document.getElementById("results");
 
 function fetchAndShow() {
   const query = encodeURIComponent(searchInput.value);
-  const url = `https://cors-anywhere.herokuapp.com/https://v3.sg.media-imdb.com/suggestion/x/${query}.json`;
+  const url = `https://cors-anywhere.azm.workers.dev/https://v3.sg.media-imdb.com/suggestion/x/${query}.json`;
   Pace.restart();
 
 
