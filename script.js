@@ -77,7 +77,6 @@ searchButton.addEventListener("click", function () {
 
 
 function episodeHighlight(cssidentification = "s1e1") {
-  console.log("episode highlight")
   document.querySelectorAll(".episodes").forEach(function (episode) {
     episode.className = "episodes"
   })
@@ -95,10 +94,12 @@ function setVideo(element) {
   Pace.restart();
   scrollToTop();
 
+  if (element.getAttribute("isWebSeries") == "false" && element.className == "links") {
+    webSeriesData.innerHTML = "";
+  }
   
   if(element.getAttribute("title") !== ""){
     document.title = element.getAttribute("title")
-    console.log(element.getAttribute("title"))
   }
 
   if (element.className.includes("episode")) {
@@ -106,6 +107,7 @@ function setVideo(element) {
   }
 
   if (element.getAttribute("isWebSeries") == "true") {
+    webSeriesData.innerHTML = "";
     async function printEpisodes() {
       // First, get the show's TMDB id based on its IMDb id
       const response = await fetch(
@@ -136,17 +138,18 @@ function setVideo(element) {
 
         for (const episode of episodesDataJSON.episodes) {
           const episodeNumber = episode.episode_number;
-          episodesData += `<a class="episodes" isWebSeries="true" cssidentification="s${seasonNumber}e${episodeNumber}" onClick="return setVideo(this)" href="https://www.2embed.to/embed/tmdb/tv?id=${showId}&s=${seasonNumber}&e=${episodeNumber}">${episodeNumber}.${episode.name}</a>`;
+          let formatedEpisodeNumber = (episodeNumber).toLocaleString('en-US', {minimumIntegerDigits: 2, useGrouping:false});
+          episodesData += `<a class="episodes" title="${seasonsDataJSON.name + ": E" + formatedEpisodeNumber + ". " + episode.name}" cssidentification="s${seasonNumber}e${episodeNumber}" onClick="return setVideo(this)" href="https://www.2embed.to/embed/tmdb/tv?id=${showId}&s=${seasonNumber}&e=${episodeNumber}">E${formatedEpisodeNumber}. ${episode.name}</a>`;
         }
 
         episodeContainer.innerHTML = episodesData;
         webSeriesData.appendChild(episodeContainer);
         episodeHighlight()
+        document.querySelector(`a[cssIdentification="s1e1"]`).click()
       }
     }
     printEpisodes()
   } else {
-    webSeriesData.innerHTML = ""
   }
   return false;
 }
