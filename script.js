@@ -32,7 +32,7 @@ function fetchAndShow() {
           let imageAndInfo = "";
 
           if (result.qid === "movie" && result.i) {
-            imageAndInfo = `<a onClick="setUrl(this); return setVideo(this);" url="imdb=${result.id}&type=movie" isWebSeries="false" title="${result.l}"  class="links" IMDB="${result.id}" href="https://www.2embed.to/embed/imdb/movie?id=${result.id}" target="_blank">
+            imageAndInfo = `<a onClick="setUrl(this); return setVideo(this);" url="imdb=${result.id}&type=movie&title=${result.l.replace(/ /g,"_")}" isWebSeries="false" title="${result.l}"  class="links" IMDB="${result.id}" href="https://www.2embed.to/embed/imdb/movie?id=${result.id}" target="_blank">
                      <img src="${result.i.imageUrl}">
                       <div class="info">
                        <h3>${result.l}</h3>
@@ -41,7 +41,7 @@ function fetchAndShow() {
                    </a>`;
 
           } else if (result.qid === "tvSeries" && result.i) {
-            imageAndInfo = `<a onClick="setUrl(this); return setVideo(this);" url="imdb=${result.id}&season=1&episode=1" IMDB="${result.id}" title="${result.l}" isWebSeries="true" class="links" href="https://www.2embed.to/embed/imdb/tv?id=${result.id}&s=1&e=1" target="_blank">
+            imageAndInfo = `<a onClick="setUrl(this); return setVideo(this);" url="imdb=${result.id}&season=1&episode=1&title=${result.l.replace(/ /g,"_")}" IMDB="${result.id}" title="${result.l}" isWebSeries="true" class="links" href="https://www.2embed.to/embed/imdb/tv?id=${result.id}&s=1&e=1" target="_blank">
                       <img src="${result.i.imageUrl}">
                         <div class="info">
                           <h3>${result.l}</h3>
@@ -117,10 +117,16 @@ function fillSearchInput() {
     searchInput.value = search;
     fetchAndShow();
   }
+
+  // It will set the contents according to url data
+
   else if (imdb && type && !search && !episode && !season) {
     fetchTitle(imdb)
       .then(title => setAll(imdb, title,season,episode,type))
       .catch(error => console.error(error));
+
+
+
   }else if (imdb && !search && episode && season) {
     fetchTitle(imdb)
     .then(title => setAll(imdb, title, season, episode,type))
@@ -226,7 +232,7 @@ function setVideo(element) {
         for (const episode of episodesDataJSON.episodes) {
           const episodeNumber = episode.episode_number;
           let formatedEpisodeNumber = (episodeNumber).toLocaleString('en-US', { minimumIntegerDigits: 2, useGrouping: false });
-          episodesData += `<a class="episodes" title="${seasonsDataJSON.name + ": E" + formatedEpisodeNumber + ". " + episode.name}" cssidentification="s${seasonNumber}e${episodeNumber}" url="imdb=${imdbID}&season=${seasonNumber}&episode=${episodeNumber}" onClick="event.preventDefault();setVideo(this);setUrl(this); " href="https://www.2embed.to/embed/tmdb/tv?id=${showId}&s=${seasonNumber}&e=${episodeNumber}">E${formatedEpisodeNumber}. ${episode.name}</a>`;
+          episodesData += `<a class="episodes" title="${seasonsDataJSON.name + ": E" + formatedEpisodeNumber + ". " + episode.name}" cssidentification="s${seasonNumber}e${episodeNumber}" url="imdb=${imdbID}&season=${seasonNumber}&episode=${episodeNumber}&title=${seasonsDataJSON.name.replace(/ /g,"_") + "_E" + formatedEpisodeNumber + "_" + episode.name.replace(/ /g,"_")}" onClick="event.preventDefault();setVideo(this);setUrl(this); " href="https://www.2embed.to/embed/tmdb/tv?id=${showId}&s=${seasonNumber}&e=${episodeNumber}">E${formatedEpisodeNumber}. ${episode.name}</a>`;
         }
 
         episodeContainer.innerHTML = episodesData;
