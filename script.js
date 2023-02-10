@@ -6,8 +6,6 @@ function scrollToTop() {
   }
 }
 
-
-
 const searchInput = document.getElementById("search-input");
 const searchButton = document.getElementById("search-button");
 const resultsContainer = document.getElementById("results");
@@ -31,32 +29,27 @@ function fetchAndShow() {
           const resultElem = document.createElement("div");
           resultElem.classList.add("result");
 
-
-          let image = "";
-          let info = "";
+          let imageAndInfo = "";
 
           if (result.qid === "movie" && result.i) {
-            image = `<a onClick="return setVideo(this)" isWebSeries="false" title="${result.l}"  class="links" IMDB="${result.id}" href="https://www.2embed.to/embed/imdb/movie?id=${result.id}" target="_blank">
-                    <img src="${result.i.imageUrl}">
-                  </a>`;
-            info = `
-            <div class="info">
-              <h3>${result.l}</h3>
-              <p>${result.s}</p>
-            </div>
-          `;
+            imageAndInfo = `<a onClick="setUrl(this); return setVideo(this);" url="imdb=${result.id}&type=movie" isWebSeries="false" title="${result.l}"  class="links" IMDB="${result.id}" href="https://www.2embed.to/embed/imdb/movie?id=${result.id}" target="_blank">
+                     <img src="${result.i.imageUrl}">
+                      <div class="info">
+                       <h3>${result.l}</h3>
+                        <p>${result.s}</p>
+                      </div>
+                   </a>`;
+
           } else if (result.qid === "tvSeries" && result.i) {
-            image = `<a onClick="return setVideo(this)" IMDB="${result.id}" title="${result.l}" isWebSeries="true" class="links" href="https://www.2embed.to/embed/imdb/tv?id=${result.id}&s=1&e=1" target="_blank">
-                    <img src="${result.i.imageUrl}">
-                  </a>`;
-            info = `
-            <div class="info">
-              <h3>${result.l}</h3>
-              <p>${result.s}</p>
-            </div>
-          `;
+            imageAndInfo = `<a onClick="setUrl(this); return setVideo(this);" url="imdb=${result.id}&season=1&episode=1" IMDB="${result.id}" title="${result.l}" isWebSeries="true" class="links" href="https://www.2embed.to/embed/imdb/tv?id=${result.id}&s=1&e=1" target="_blank">
+                      <img src="${result.i.imageUrl}">
+                        <div class="info">
+                          <h3>${result.l}</h3>
+                          <p>${result.s}</p>
+                        </div>
+                    </a>`;
           }
-          resultElem.innerHTML = image + info;
+          resultElem.innerHTML = imageAndInfo;
           resultsContainer.appendChild(resultElem);
         }
       });
@@ -64,11 +57,102 @@ function fetchAndShow() {
 
 }
 
+function setAll(imdb, title, season, episode, type) {
+  if (imdb && title && !season && !episode && type) {
+    let a = document.createElement("a");
+    a.setAttribute("onClick", "setUrl(this); return setVideo(this);");
+    a.setAttribute("url", `imdb=${imdb}&&type=movie`);
+    a.setAttribute("isWebSeries", "false");
+    a.setAttribute("title", title);
+    a.setAttribute("class", "links");
+    a.setAttribute("IMDB", imdb);
+    a.setAttribute("href", "https://www.2embed.to/embed/imdb/movie?id=" + imdb);
+    a.setAttribute("target", "_blank");
+    a.click();
+  }else if(imdb && title && episode && !type){
+    let a = document.createElement("a");
+    a.setAttribute("onClick", "setUrl(this); return setVideo(this);");
+    a.setAttribute("url", `imdb=${imdb}&season=${season}&episode=${episode}`);
+    a.setAttribute("isWebSeries", "true");
+    a.setAttribute("title", title);
+    a.setAttribute("class", "links");
+    a.setAttribute("IMDB", imdb);
+    a.setAttribute("href", `https://www.2embed.to/embed/imdb/tv?id=${imdb}&s=${season}&e=${episode}`);
+    a.setAttribute("target", "_blank");
+    a.click();
+  }
+
+}
+
+const fetchTitle = async (imdbID) => {
+  const url = `https://cors-anywhere.azm.workers.dev/https://v3.sg.media-imdb.com/suggestion/x/${imdbID}.json`;
+
+  try {
+    const response = await fetch(url);
+    const data = await response.json();
+    const title = data.d[0].l;
+    return title;
+  } catch (error) {
+    console.error(error);
+  }
+};
+
+
+
+function setUrl(element) {
+  let search = element.getAttribute("url")
+  window.history.replaceState({}, "", `?${(search).replace(/%20/g, "+")}`);
+}
+
+function fillSearchInput() {
+  let searchParams = new URLSearchParams(window.location.search);
+  let search = searchParams.get("search");
+  let season = searchParams.get("season");
+  let episode = searchParams.get("episode");
+  let imdb = searchParams.get("imdb");
+  let type = searchParams.get("type");
+  if (search && !season && !episode && !imdb) {
+    search = search.replace(/\+/g, "%20");
+    const searchInput = document.querySelector("#search-input");
+    searchInput.value = search;
+    fetchAndShow();
+  }
+  else if (imdb && type && !search && !episode && !season) {
+    fetchTitle(imdb)
+      .then(title => setAll(imdb, title,season,episode,type))
+      .catch(error => console.error(error));
+  }else if (imdb && !search && episode && season) {
+    fetchTitle(imdb)
+    .then(title => setAll(imdb, title, season, episode,type))
+    .catch(error => console.error(error));
+  }
+
+
+}
+
+
+fillSearchInput()
+
+
+function updateURL(input) {
+  let search = input.value;
+  if (search) {
+    window.history.replaceState({}, "", `?search=${encodeURIComponent(search).replace(/%20/g, "+")}`);
+  } else {
+    window.history.replaceState({}, "", window.location.pathname);
+  }
+}
+
+
 searchInput.addEventListener("keyup", function () {
+  updateURL(this)
   fetchAndShow();
-    $('html,body').animate({
-        scrollTop: $("#results").offset().top},
-        'slow');
+
+  $('html,body').animate({
+    scrollTop: $("#results").offset().top
+  },
+    'slow');
+
 });
 
 searchButton.addEventListener("click", function () {
@@ -86,24 +170,27 @@ function episodeHighlight(cssidentification = "s1e1") {
 
 function setVideo(element) {
   const iframe = document.getElementById("iframe");
+  const video = document.getElementById("video");
   iframe.src = element.getAttribute("href");
-  iframe.style.display = "block";
+  video.style.display = "block";
   const webSeriesData = document.getElementById("webSeriesData");
   const tmdbApiKey = "b6b677eb7d4ec17f700e3d4dfc31d005";
   const imdbID = element.getAttribute("IMDB");
   Pace.restart();
   scrollToTop();
 
+
   if (element.getAttribute("isWebSeries") == "false" && element.className == "links") {
     webSeriesData.innerHTML = "";
   }
-  
-  if(element.getAttribute("title") !== ""){
+
+  if (element.getAttribute("title") !== "") {
     document.title = element.getAttribute("title")
   }
 
   if (element.className.includes("episode")) {
     episodeHighlight(element.getAttribute("cssidentification"))
+    console.log("clicked")
   }
 
   if (element.getAttribute("isWebSeries") == "true") {
@@ -138,8 +225,8 @@ function setVideo(element) {
 
         for (const episode of episodesDataJSON.episodes) {
           const episodeNumber = episode.episode_number;
-          let formatedEpisodeNumber = (episodeNumber).toLocaleString('en-US', {minimumIntegerDigits: 2, useGrouping:false});
-          episodesData += `<a class="episodes" title="${seasonsDataJSON.name + ": E" + formatedEpisodeNumber + ". " + episode.name}" cssidentification="s${seasonNumber}e${episodeNumber}" onClick="return setVideo(this)" href="https://www.2embed.to/embed/tmdb/tv?id=${showId}&s=${seasonNumber}&e=${episodeNumber}">E${formatedEpisodeNumber}. ${episode.name}</a>`;
+          let formatedEpisodeNumber = (episodeNumber).toLocaleString('en-US', { minimumIntegerDigits: 2, useGrouping: false });
+          episodesData += `<a class="episodes" title="${seasonsDataJSON.name + ": E" + formatedEpisodeNumber + ". " + episode.name}" cssidentification="s${seasonNumber}e${episodeNumber}" url="imdb=${imdbID}&season=${seasonNumber}&episode=${episodeNumber}" onClick="event.preventDefault();setVideo(this);setUrl(this); " href="https://www.2embed.to/embed/tmdb/tv?id=${showId}&s=${seasonNumber}&e=${episodeNumber}">E${formatedEpisodeNumber}. ${episode.name}</a>`;
         }
 
         episodeContainer.innerHTML = episodesData;
@@ -151,6 +238,14 @@ function setVideo(element) {
     printEpisodes()
   } else {
   }
+
+  window.dataLayer = window.dataLayer || [];
+  function gtag() { dataLayer.push(arguments); }
+  gtag('js', new Date());
+
+  gtag('config', 'G-THTQ9GZQ0J');
+  console.log("gtag updated location")
+
   return false;
 }
 
