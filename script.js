@@ -11,6 +11,10 @@ const searchButton = document.getElementById("search-button");
 const resultsContainer = document.getElementById("results");
 const corsProxy = "https://corsproxy.io/?";
 
+// functions that manipulates the queries of url to get a low resolution image to increase page speed
+function optimisedImageUrl(url) {
+  return url.replace("._V1_.", "._V1_QL75_UX160_.");
+}
 
 // Fetch and Show Cards
 
@@ -19,35 +23,32 @@ function fetchAndShow() {
   const url = `${corsProxy}https://v3.sg.media-imdb.com/suggestion/x/${query}.json`;
   Pace.restart();
 
-
   fetch(url)
-    .then(response => response.json())
-    .then(data => {
+    .then((response) => response.json())
+    .then((data) => {
       const results = data.d;
 
       resultsContainer.innerHTML = "";
 
-      results.forEach(result => {
-
+      results.forEach((result) => {
         if (result.i && (result.qid === "movie" || result.qid === "tvSeries")) {
           const resultElem = document.createElement("div");
           resultElem.classList.add("result");
-          resultElem.setAttribute("IMDB", result.id)
+          resultElem.setAttribute("IMDB", result.id);
 
           let imageAndInfo = "";
 
           if (result.qid === "movie" && result.i) {
             imageAndInfo = `<a onClick="setUrl(this); return setVideo(this);" url="imdb=${result.id}&type=movie&title=${result.l.replace(/ /g, "_")}" isWebSeries="false" title="${result.l}"  class="links" IMDB="${result.id}" href="https://www.2embed.to/embed/imdb/movie?id=${result.id}" target="_blank">
-                     <img src="${result.i.imageUrl}">
+                     <img alt="${result.l}" src="${optimisedImageUrl(result.i.imageUrl)}">
                       <div class="info">
                        <h3>${result.l}</h3>
                         <p>${result.s}</p>
                       </div>
                    </a>`;
-
           } else if (result.qid === "tvSeries" && result.i) {
             imageAndInfo = `<a onClick="setUrl(this); return setVideo(this);" url="imdb=${result.id}&season=1&episode=1&title=${result.l.replace(/ /g, "_")}" IMDB="${result.id}" title="${result.l}" isWebSeries="true" class="links" href="https://www.2embed.to/embed/imdb/tv?id=${result.id}&s=1&e=1" target="_blank">
-                      <img src="${result.i.imageUrl}">
+                      <img alt="${result.l}" src="${optimisedImageUrl(result.i.imageUrl)}">
                         <div class="info">
                           <h3>${result.l}</h3>
                           <p>${result.s}</p>
@@ -59,7 +60,6 @@ function fetchAndShow() {
         }
       });
     });
-
 }
 
 // A function which will set the player url and page url by imitating a anchor tag click
@@ -68,7 +68,10 @@ function setAll(imdb, title, season, episode, type) {
   if (imdb && title && !season && !episode && type) {
     let a = document.createElement("a");
     a.setAttribute("onClick", "setUrl(this); return setVideo(this);");
-    a.setAttribute("url", `imdb=${imdb}&type=movie&title=${title.replace(/ /g, "_")}`);
+    a.setAttribute(
+      "url",
+      `imdb=${imdb}&type=movie&title=${title.replace(/ /g, "_")}`
+    );
     a.setAttribute("isWebSeries", "false");
     a.setAttribute("title", title);
     a.setAttribute("class", "links");
@@ -80,17 +83,19 @@ function setAll(imdb, title, season, episode, type) {
     // let formatedEpisodeNumber = (episode).toLocaleString('en-US', { minimumIntegerDigits: 2, useGrouping: false });
     let a = document.createElement("a");
     a.setAttribute("onClick", "setUrl(this); return setVideo(this);");
-    console.log("season setall", season, "episode", episode)
+    console.log("season setall", season, "episode", episode);
     a.setAttribute("url", `imdb=${imdb}&season=${season}&episode=${episode}`);
     a.setAttribute("isWebSeries", "true");
     a.setAttribute("title", title);
     a.setAttribute("class", "links");
     a.setAttribute("IMDB", imdb);
-    a.setAttribute("href", `https://www.2embed.to/embed/imdb/tv?id=${imdb}&s=${season}&e=${episode}`);
+    a.setAttribute(
+      "href",
+      `https://www.2embed.to/embed/imdb/tv?id=${imdb}&s=${season}&e=${episode}`
+    );
     a.setAttribute("target", "_blank");
     a.click();
   }
-
 }
 
 // fetch titile of movie/webseries by its imdb id
@@ -111,8 +116,8 @@ const fetchTitle = async (imdbID) => {
 // set url of element by getting its custom url attirbute
 
 function setUrl(element) {
-  let search = element.getAttribute("url")
-  window.history.replaceState({}, "", `?${(search).replace(/%20/g, "+")}`);
+  let search = element.getAttribute("url");
+  window.history.replaceState({}, "", `?${search.replace(/%20/g, "+")}`);
 }
 
 // insert search query in search box from url and set contents from url
@@ -135,37 +140,34 @@ function fillSearchInput() {
   }
 
   // It will set the contents according to url data
-
   else if (imdb && type && !search && !episode && !season) {
     fetchTitle(imdb)
-      .then(title => setAll(imdb, title, season, episode, type))
-      .catch(error => console.error(error));
+      .then((title) => setAll(imdb, title, season, episode, type))
+      .catch((error) => console.error(error));
 
     // It will set the contents according to url data
-
   } else if (imdb && !search && episode && season) {
-    console.log("season", season, "episode", episode)
+    console.log("season", season, "episode", episode);
 
     fetchTitle(imdb)
-      .then(title => setAll(imdb, title, season, episode, type))
-      .catch(error => console.error(error));
-    console.log("season", season, "episode", episode)
-
-
-
+      .then((title) => setAll(imdb, title, season, episode, type))
+      .catch((error) => console.error(error));
+    console.log("season", season, "episode", episode);
   }
-
-
 }
 
-fillSearchInput()
+fillSearchInput();
 
 // update url by search query
 
 function updateURL(input) {
   let search = input.value;
   if (search) {
-    window.history.replaceState({}, "", `?search=${encodeURIComponent(search).replace(/%20/g, "+")}`);
+    window.history.replaceState(
+      {},
+      "",
+      `?search=${encodeURIComponent(search).replace(/%20/g, "+")}`
+    );
   } else {
     window.history.replaceState({}, "", window.location.pathname);
   }
@@ -178,13 +180,13 @@ function highlightCards() {
   let imdb_id = searchParams.get("imdb");
   try {
     document.querySelectorAll(".result").forEach(function (card) {
-      card.className = "result"
-    })
-    document.querySelector(`div[IMDB=${imdb_id}]`).className = "result hoverClass"
+      card.className = "result";
+    });
+    document.querySelector(`div[IMDB=${imdb_id}]`).className =
+      "result hoverClass";
   } catch (error) {
     // will throw error only if the class is not present
   }
-
 }
 
 // Listen for the onpopstate event and update the display of elements with the class "information"
@@ -208,39 +210,44 @@ window.onpopstate = function () {
   }
 };
 
+//  ajax auto search by input which will execute when user stops typing for 500ms
 
-//  ajax auto search by input
+let timer;
 
 searchInput.addEventListener("keyup", function () {
-  updateURL(this)
-  fetchAndShow();
-  // hide information 
-  window.dispatchEvent(new PopStateEvent('popstate'));
-
-  $('html,body').animate({
-    scrollTop: $("#results").offset().top
-  },
-    'slow');
-
+  let inputQuery = this;
+  clearTimeout(timer);
+  timer = setTimeout(function () {
+    updateURL(inputQuery);
+    fetchAndShow();
+    window.dispatchEvent(new PopStateEvent("popstate"));
+    $("html,body").animate(
+      {
+        scrollTop: $("#results").offset().top,
+      },
+      "slow"
+    );
+  }, 500); // wait for 500ms before executing the function
 });
 
 // button click search
 
 searchButton.addEventListener("click", function () {
   fetchAndShow();
-  // hide information 
-  window.dispatchEvent(new PopStateEvent('popstate'));
+  // hide information
+  window.dispatchEvent(new PopStateEvent("popstate"));
 });
 
 // higlight episodes of webseries
 
 function episodeHighlight(cssidentification = "s1e1") {
   document.querySelectorAll(".episodes").forEach(function (episode) {
-    episode.className = "episodes"
-  })
-  document.querySelector(`.episodes[cssidentification='${cssidentification}']`).className = "episodes selected"
+    episode.className = "episodes";
+  });
+  document.querySelector(
+    `.episodes[cssidentification='${cssidentification}']`
+  ).className = "episodes selected";
 }
-
 
 // Do multiple tasks on anchor tag click
 
@@ -255,26 +262,29 @@ function setVideo(element) {
   Pace.restart();
   scrollToTop();
 
-  // hide information 
-  window.dispatchEvent(new PopStateEvent('popstate'));
+  // hide information
+  window.dispatchEvent(new PopStateEvent("popstate"));
 
   // clearing episodes list box for another series
 
-  if (element.getAttribute("isWebSeries") == "false" && element.className == "links") {
+  if (
+    element.getAttribute("isWebSeries") == "false" &&
+    element.className == "links"
+  ) {
     webSeriesData.innerHTML = "";
   }
 
   // setting page title
 
   if (element.getAttribute("title") !== "") {
-    document.title = element.getAttribute("title")
+    document.title = element.getAttribute("title");
   }
 
   // highlight selected webseries episode
 
   if (element.className.includes("episode")) {
-    episodeHighlight(element.getAttribute("cssidentification"))
-    console.log("clicked")
+    episodeHighlight(element.getAttribute("cssidentification"));
+    console.log("clicked");
   }
 
   // Displaying webseries episode
@@ -297,7 +307,11 @@ function setVideo(element) {
       const numberOfSeasons = seasonsDataJSON.number_of_seasons;
 
       webSeriesData.innerHTML += `<h2>Seasons:</h2>`;
-      for (let seasonNumber = 1; seasonNumber <= numberOfSeasons; seasonNumber++) {
+      for (
+        let seasonNumber = 1;
+        seasonNumber <= numberOfSeasons;
+        seasonNumber++
+      ) {
         webSeriesData.innerHTML += `<h3>Season ${seasonNumber}:</h3><br>`;
         let episodeContainer = document.createElement("div");
         episodeContainer.classList.add("episode-container");
@@ -311,41 +325,47 @@ function setVideo(element) {
 
         for (const episode of episodesDataJSON.episodes) {
           const episodeNumber = episode.episode_number;
-          let formatedEpisodeNumber = (episodeNumber).toLocaleString('en-US', { minimumIntegerDigits: 2, useGrouping: false });
+          let formatedEpisodeNumber = episodeNumber.toLocaleString("en-US", {
+            minimumIntegerDigits: 2,
+            useGrouping: false,
+          });
           episodesData += `<a class="episodes" title="${seasonsDataJSON.name + ": E" + formatedEpisodeNumber + ". " + episode.name}" cssidentification="s${seasonNumber}e${episodeNumber}" url="imdb=${imdbID}&season=${seasonNumber}&episode=${episodeNumber}&title=${seasonsDataJSON.name.replace(/ /g, "_") + "_E" + formatedEpisodeNumber + "_" + episode.name.replace(/ /g, "_")}" onClick="event.preventDefault();setVideo(this);setUrl(this); " href="https://www.2embed.to/embed/tmdb/tv?id=${showId}&s=${seasonNumber}&e=${episodeNumber}">E${formatedEpisodeNumber}. ${episode.name}</a>`;
         }
 
         episodeContainer.innerHTML = episodesData;
         webSeriesData.appendChild(episodeContainer);
-        episodeHighlight()
-
+        episodeHighlight();
       }
 
       // Highlighting Selected Episodes as per url
 
-          let searchParams = new URLSearchParams(window.location.search);
-          let season = searchParams.get("season");
-          let episode = searchParams.get("episode");
+      let searchParams = new URLSearchParams(window.location.search);
+      let season = searchParams.get("season");
+      let episode = searchParams.get("episode");
 
-          if (season && episode) {
-            document.querySelector(`a[cssIdentification="s${season}e${episode}"]`).click()
-          } else if ((season && !episode)) {
-            document.querySelector(`a[cssIdentification="s${season}e1"]`).click()
-          } else {
-            document.querySelector(`a[cssIdentification="s1e1"]`).click()
-          }
+      if (season && episode) {
+        document
+          .querySelector(`a[cssIdentification="s${season}e${episode}"]`)
+          .click();
+      } else if (season && !episode) {
+        document.querySelector(`a[cssIdentification="s${season}e1"]`).click();
+      } else {
+        document.querySelector(`a[cssIdentification="s1e1"]`).click();
+      }
     }
-    printEpisodes()
+    printEpisodes();
   } else {
   }
 
   // pushing data to analytics by gtag
 
   window.dataLayer = window.dataLayer || [];
-  function gtag() { dataLayer.push(arguments); }
-  gtag('js', new Date());
+  function gtag() {
+    dataLayer.push(arguments);
+  }
+  gtag("js", new Date());
 
-  gtag('config', 'G-THTQ9GZQ0J');
+  gtag("config", "G-THTQ9GZQ0J");
 
   highlightCards();
 
@@ -353,5 +373,3 @@ function setVideo(element) {
 
   return false;
 }
-
-

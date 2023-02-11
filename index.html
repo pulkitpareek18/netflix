@@ -1,27 +1,38 @@
-<html>
+<!DOCTYPE html>
+<html lang="en">
 
 <head>
+  <meta charset="UTF-8">
+  <link rel="manifest" href="/manifest.json">
+  <link rel="apple-touch-icon" href="/icons/apple-touch-icon.png">
+  <link rel="shortcut icon" href="icons/icon.ico" type="image/x-icon">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="theme-color" content="#4285f4" />
+  <meta name=”robots” content="index, follow">
+  <meta name="description"
+    content="Discover and stream your favorite movies and TV shows with NETFLIX KE PITAJI - an open source content search and watch website. Enjoy unlimited access to a vast library of content for free.">
   <title>NETFLIX KE PITAJI</title>
-  <link rel="stylesheet" href="style.min.css">
-  <script src="https://cdn.jsdelivr.net/npm/pace-js@latest/pace.min.js"></script>
-  <link rel="stylesheet" href="center-atom.min.css">
-  <link rel="shortcut icon" href="cinema-movie-logo-with-gradient-background-template_502990-937.avif"
-    type="image/x-icon">
-  <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.6.3/jquery.min.js"
-    integrity="sha512-STof4xm1wgkfm7heWqFJVn58Hm3EtS31XFaagaa8VMReCXAkQnJZ+jEy8PCC/iT18dFy95WcExNHFTqLyp72eQ=="
-    crossorigin="anonymous" referrerpolicy="no-referrer"></script>
+  <link rel="preload stylesheet" href="style.min.css" as="style">
+  <link rel="preload stylesheet" href="center-atom.min.css" as="style">
   <!-- Google tag (gtag.js) -->
-  <script async src="https://www.googletagmanager.com/gtag/js?id=G-THTQ9GZQ0J"></script>
-  <script>
-    window.dataLayer = window.dataLayer || [];
-    function gtag() { dataLayer.push(arguments); }
-    gtag('js', new Date());
-
-    gtag('config', 'G-THTQ9GZQ0J');
+  <script defer src="https://www.googletagmanager.com/gtag/js?id=G-THTQ9GZQ0J">
+  window.dataLayer = window.dataLayer || [];
+  function gtag() { dataLayer.push(arguments); }
+  gtag('js', new Date());
+  gtag('config', 'G-THTQ9GZQ0J');
   </script>
-  <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-9489381289747189"
-  crossorigin="anonymous"></script>
+<!-- Serviceworker code for PWA  -->
+  <script>
+    if ('serviceWorker' in navigator) {
+      window.addEventListener('load', function() {
+        navigator.serviceWorker.register('/sw.js').then(function(registration) {
+          console.log('Service worker registered: ', registration.scope);
+        }).catch(function(error) {
+          console.log('Service worker registration failed: ', error);
+        });
+      });
+    }
+  </script>
 </head>
 
 <body>
@@ -94,8 +105,8 @@
       <h3>Source Code</h3>
 
       <p>The Source Code of this Tool is available at Github repository by Pulkit Pareek. You can access the repository
-        at <a style="color:rgb(0, 140, 255);margin:0%" href="https://github.com/pulkitpareek18/netflix"
-          target="_blank">Here</a>.</p>
+        at <a style="color:rgb(0, 140, 255);margin:0%" title="Link to Github Repository" href="https://github.com/pulkitpareek18/netflix"
+          target="_blank">Here(Link to Github Repository)</a>.</p>
 
       <h3>Conclusion</h3>
 
@@ -115,9 +126,11 @@
       </div>
     </div>
   </center>
+  <script async src="https://cdn.jsdelivr.net/npm/pace-js@latest/pace.min.js"></script>
   <script src="script.min.js"></script>
+  <!-- <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-9489381289747189"
+    crossorigin="anonymous"></script> -->
   <!-- Go to www.addthis.com/dashboard to customize your tools -->
-  <script type="text/javascript" src="//s7.addthis.com/js/300/addthis_widget.js#pubid=ra-624474fdd4c42686"></script>
+  <script defer src="addthis.js"></script>
 </body>
-
 </html>

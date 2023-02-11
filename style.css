@@ -197,7 +197,7 @@ iframe {
 }
 
 .information p {
-  color: rgb(58, 55, 255);
+  color: #39cdbc;
   font-size: 2vw;
   font-weight: 700;
 }
@@ -235,6 +235,13 @@ li {
 
 .pagelinks a:hover {
   color: #ae00ff !important;
+}
+
+.pagelinks{
+  display: flex;
+  flex-direction: row;
+  justify-content: center;
+  align-items: center;
 }
 
 .footerLinks a {
@@ -316,11 +323,18 @@ li {
   .result .info p {
     font-size: 1.8vw;
   }
+
+  .pagelinks{
+    flex-direction: column;
+  }
+  .pagelinks a{
+  font-size: 5vw;
+  }
 }
 
 @media only screen and (max-width: 414px) {
   .information p {
-    font-size: 7vw;
+    font-size: 6vw;
   }
 
   .information h3 {
@@ -367,6 +381,10 @@ li {
   .result .info {
     padding: 0.9vw;
   }
+
+  .pagelinks a{
+    font-size: 7vw;
+    }
 }
 
 @media only screen and (min-width: 1400px) {
