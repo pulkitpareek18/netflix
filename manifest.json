@@ -20,8 +20,8 @@
       }
     ],
     "start_url": "/index.html",
-    "display": "standalone",
-    "theme_color": "#ff0000",
-    "background_color": "#ffffff"
+    "display": "minimal-ui",
+    "theme_color": "#111111",
+    "background_color": "#111111"
   }
   
