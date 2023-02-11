@@ -57,9 +57,9 @@ button:hover {
 
 
 .result {
-  width: 16vw;
+  width: 14vw;
   height: fit-content;
-  margin: 20px;
+  margin: 2vw;
   border: 0.1vw solid rgb(190, 190, 190);
   box-shadow: rgba(211, 211, 211, 0.322) 0px 0px 2vw 0.05vw;
   border-radius: 5px;
@@ -67,12 +67,17 @@ button:hover {
   transition-duration: 0.5s;
 }
 
-.result:hover{
+.result:hover {
   width: 18vw;
   transition-duration: 0.5s;
   box-shadow: rgba(211, 211, 211, 0.322) 0px 0px 7vw 1vw;
 }
 
+.hoverClass {
+  width: 16.7vw !important;
+  transition-duration: 0.5s;
+  box-shadow: rgba(211, 211, 211, 0.322) 0px 0px 7vw 1vw;
+}
 
 
 .result img {
@@ -81,14 +86,20 @@ button:hover {
 }
 
 .result .info {
-  padding: 10px;
+  padding: 0.7vw;
 }
 
 .result .info h3 {
   margin: 0;
 }
 
-.result .info h3:hover{
+.result .info h3:hover {
+  color: #39cdbc;
+  font-weight: bold;
+  text-shadow: #39cdbc 0px 0vw 5vw;
+}
+
+.hoverClass .info h3 {
   color: #39cdbc;
   font-weight: bold;
   text-shadow: #39cdbc 0px 0vw 5vw;
@@ -96,17 +107,23 @@ button:hover {
 
 .result .info p {
   margin: 0;
-  font-size: 14px;
+  font-size: 1vw;
   color: gray;
 }
 
-.result .info p:hover{
+.result .info p:hover {
   color: rgb(90, 212, 192);
   font-weight: 500;
   text-shadow: #8fe6db 0px 0vw 5vw;
 }
 
-a{
+.hoverClass .info p {
+  color: rgb(90, 212, 192);
+  font-weight: 500;
+  text-shadow: #8fe6db 0px 0vw 5vw;
+}
+
+a {
   text-decoration: none;
 }
 
@@ -166,9 +183,68 @@ iframe {
   top: 10;
 }
 
-#video{
+#video {
   display: none;
 }
+
+.information {
+  margin: 5vw;
+}
+
+.information h3 {
+  font-size: 3vw;
+  font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+}
+
+.information p {
+  color: rgb(58, 55, 255);
+  font-size: 2vw;
+  font-weight: 700;
+}
+
+h2 {
+  font-size: 3vw;
+  font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+  color: aqua;
+}
+
+h3 {
+  font-size: 3vw;
+}
+
+.information a,
+li {
+  margin: 1vw;
+  color: blue;
+  font-size: x-large;
+  font-weight: 500;
+}
+
+.information a:hover {
+  color: rgb(0, 225, 255) !important;
+}
+
+.pagelinks a {
+  margin: 1vw;
+  font-size: x-large;
+  font-weight: 500;
+  color: #00b7ff !important;
+  font-weight: bolder;
+  text-decoration: underline;
+}
+
+.pagelinks a:hover {
+  color: #ae00ff !important;
+}
+
+.footerLinks a {
+  color: #b803ff !important;
+}
+
+.info h3 {
+  font-size: 1.6vw;
+}
+
 
 /* Responsive Configuration */
 
@@ -193,11 +269,19 @@ iframe {
   }
 
   h1 {
-    font-size: 11vw;
+    font-size: 7vw;
   }
 
   h2 {
     font-size: 7vw;
+  }
+
+  h3 {
+    font-size: 5vw;
+  }
+
+  .info h3 {
+    font-size: 3vw;
   }
 
   .result {
@@ -205,9 +289,44 @@ iframe {
     margin: 2vw;
   }
 
+  .hoverClass {
+    width: 36vw !important;
+    transition-duration: 0.5s;
+    box-shadow: rgba(211, 211, 211, 0.322) 0px 0px 7vw 1vw;
+  }
+
+  .result:hover {
+    width: 36vw;
+    transition-duration: 0.5s;
+    box-shadow: rgba(211, 211, 211, 0.322) 0px 0px 7vw 1vw;
+  }
+
+  .information p {
+    font-size: 4vw;
+  }
+
+  .information a {
+    font-size: 4vw;
+  }
+
+  .information h3 {
+    font-size: 7vw;
+  }
+
+  .result .info p {
+    font-size: 1.8vw;
+  }
 }
 
 @media only screen and (max-width: 414px) {
+  .information p {
+    font-size: 7vw;
+  }
+
+  .information h3 {
+    font-size: 11vw;
+  }
+
   button {
     padding: 0.48rem 0.4rem;
   }
@@ -221,6 +340,33 @@ iframe {
     margin: 2vw;
   }
 
+  .result:hover {
+    width: 45vw;
+    transition-duration: 0.5s;
+    box-shadow: rgba(211, 211, 211, 0.322) 0px 0px 7vw 1vw;
+  }
+
+  .hoverClass {
+    width: 45vw !important;
+    transition-duration: 0.5s;
+    box-shadow: rgba(211, 211, 211, 0.322) 0px 0px 7vw 1vw;
+  }
+
+  .information a {
+    font-size: 7vw;
+  }
+
+  .info h3 {
+    font-size: 4vw;
+  }
+
+  .result .info p {
+    font-size: 3vw;
+  }
+
+  .result .info {
+    padding: 0.9vw;
+  }
 }
 
 @media only screen and (min-width: 1400px) {
@@ -229,10 +375,12 @@ iframe {
     padding: 0.7vw 1vw;
     font-size: 1.5vw;
   }
-  input{
+
+  input {
     font-size: 1.5vw;
     width: 30vw;
   }
+
   h1 {
     font-size: 4vw;
   }
@@ -240,8 +388,8 @@ iframe {
   h2 {
     font-size: 3vw;
   }
-  
-  p {
+
+  .info p {
     font-size: 1vw !important;
   }
 
@@ -249,10 +397,28 @@ iframe {
     font-size: 1.5vw;
   }
 
+  .hoverClass {
+    width: 16.4vw !important;
+    transition-duration: 0.5s;
+    box-shadow: rgba(211, 211, 211, 0.322) 0px 0px 7vw 1vw;
+  }
+
+  .information a {
+    font-size: 2vw;
+  }
+
+  .alwaysVisibleContent h3 {
+    font-size: 2vw;
+  }
+
+  .pagelinks a {
+    font-size: 2vw;
+  }
 }
 
 @media only screen and (min-width: 1600px) {
-  .result{
-    width: 11vw;
+  .result {
+    width: 13vw;
+    margin: 1vw;
   }
 }
