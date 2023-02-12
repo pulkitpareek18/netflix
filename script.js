@@ -101,7 +101,7 @@ function setAll(imdb, title, season, episode, type) {
 // fetch titile of movie/webseries by its imdb id
 
 const fetchTitle = async (imdbID) => {
-  const url = `https://cors-anywhere.azm.workers.dev/https://v3.sg.media-imdb.com/suggestion/x/${imdbID}.json`;
+  const url = `${corsProxy}/https://v3.sg.media-imdb.com/suggestion/x/${imdbID}.json`;
 
   try {
     const response = await fetch(url);
