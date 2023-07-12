@@ -33,4 +33,4 @@ In conclusion, Netflix ke Pitaji is an open-source project that provides a compr
 
 ### Libraries Used
 
-[2Embed](https://2embed.to/)   [jQuery](https://jquery.com/)   [PACE](https://codebyzach.github.io/pace/)   [TMDB](https://tmdb.com)   [IMDB](https://imdb.com)   [CORS-Proxy](https://corsproxy.io)
+[2Embed](https://2embed.cc/)   [jQuery](https://jquery.com/)   [PACE](https://codebyzach.github.io/pace/)   [TMDB](https://tmdb.com)   [IMDB](https://imdb.com)   [CORS-Proxy](https://corsproxy.io)
