@@ -1,36 +1,73 @@
+
 # NETFLIX KE PITAJI
-Here you can search for movies and web shows which are listed on IMDB and the one that are available on Internet for free, you can also watch them.
 
-# PROJECT INFORMATION
 
-### Introduction
+Watch all your favourite movies, web series, TV shows and anime for free. 
 
-Netflix ke Pitaji is a one-of-a-kind, open-source project that allows users to search and retrieve data about Movies and Web Shows available on the Internet. This documentation provides a comprehensive overview of the features and functionality of the website, including its data sources, user interface, and community features.
+[!["Buy Me A Coffee"](https://www.buymeacoffee.com/assets/img/custom_images/orange_img.png)](https://www.buymeacoffee.com/pulkitpareek18)
 
-### Data Sources
 
-Netflix ke Pitaji retrieves data from two of the largest movie and TV databases on the internet: IMDB (Internet Movie Database) and TMDB (The Movie Database). This combination of data sources provides a comprehensive and up-to-date movie and TV show library, ensuring that users have access to the latest information on their favorite movies and TV shows.
 
-### User Interface
+## Demo
 
-The website has a simple and user-friendly interface, making it easy for users to navigate and search for movies and TV shows. The no reload feature of this website makes it very unique and super fast. The page load speed of this website is approximately 0.1 Seconds.
+https://netflix-1uh.pages.dev
 
-### Movie and TV Show Information
+## GIF
 
-The movie and TV show pages on Netflix ke Pitaji provide users with a wealth of information about the movie or TV show. The page includes the poster thumbnail, and information about cast and crew. More information about the Movies and Shows is intentionally not displayed, If you want to display that information then you can modify that in the source code.
+![App GIF](https://raw.githubusercontent.com/pulkitpareek18/netflix/main/netflix-ke-pitaji.gif)
 
-### Single Page Website
 
-It is important to note that Netflix ke Pitaji is a single page client side website and does not store any information on its servers. All data is retrieved from IMDB and TMDB and is displayed on the website in real-time. Despite of being a single page website the Url's in addres bar are updated and their event is also handled. Means if you enter a url which contains some data about movies/webseries/search\_query the website will load that data same as a normal website with backend does. This means that the website is fast and responsive, providing a seamless user experience for its users.
+## Run Locally
 
-### Source Code
+Clone the project
 
-The Source Code of this Tool is available at Github repository by Pulkit Pareek. You can access the repository at [Here](https://github.com/pulkitpareek18/netflix).
+```bash
+  git clone https://github.com/pulkitpareek18/netflix
+```
 
-### Conclusion
+Open the project directory and run `index.html`.
 
-In conclusion, Netflix ke Pitaji is an open-source project that provides a comprehensive movie and TV show library and a unique movie-watching experience. With its simple and user-friendly interface, comprehensive movie and TV show information, and the ability to watch movies and TV shows that are available on the internet for free.
 
-### Libraries Used
+## Features
 
-[2Embed](https://2embed.to/)   [jQuery](https://jquery.com/)   [PACE](https://codebyzach.github.io/pace/)   [TMDB](https://tmdb.com)   [IMDB](https://imdb.com)   [CORS-Proxy](https://corsproxy.io)
+- Watch any movie, webseries, TV show or anime for free.
+- **Url Sharing**  
+    Despite of being a single page website built wihout any framework, you can still share url's of movies and other shows.
+- Ultra fast loading.
+- Single page website.
+
+
+
+
+## Acknowledgements
+
+- [Pace.js](https://codebyzach.github.io/pace/e.com/project/elangosundar/awesome-README-templates)
+- IMDB
+- TMDB
+- 2Embed
+- [jQuery](https://github.com/jquery/jquery)
+- [CORS-Proxy](https://corsproxy.io)
+
+ 
+
+
+## Authors
+
+- [@pulkitpareek18](https://www.github.com/pulkitpareek18)
+
+
+## Contributing
+
+Contributions are always welcome!  
+If you have any new Idea or have found a bug, please don't hesitate to open a Pull Request.
+
+
+## License
+
+[MIT](https://github.com/pulkitpareek18/netflix/blob/main/LICENSE)
+
+
+## Support
+
+For support, email pulkitpareekofficial@gmail.com or ask any query on Twitter.
+
