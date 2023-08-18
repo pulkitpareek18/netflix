@@ -44,7 +44,7 @@ Open the project directory and run `index.html`.
 - [Pace.js](https://codebyzach.github.io/pace/e.com/project/elangosundar/awesome-README-templates)
 - IMDB
 - TMDB
-- Smashy Stream
+- [Smashy Stream](https://embed.smashystream.com)
 - [CORS-Proxy](https://corsproxy.io)
 
 
