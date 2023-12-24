@@ -45,8 +45,6 @@ Open the project directory and run `index.html`.
 - IMDB
 - TMDB
 - Smashy Stream
-- [CORS-Proxy](https://corsproxy.io)
-
 
 ## Authors
 
