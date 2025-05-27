@@ -76,40 +76,6 @@ function fetchAndShow() {
 
 // A function which will set the player url and page url by imitating a anchor tag click
 
-function setAll(imdb, title, season, episode, type) {
-  if (imdb && title && !season && !episode && type) {
-    let a = document.createElement("a");
-    a.setAttribute("onClick", "setUrl(this); return setVideo(this);");
-    a.setAttribute(
-      "url",
-      `imdb=${imdb}&type=movie&title=${title.replace(/ /g, "_")}`
-    );
-    a.setAttribute("isWebSeries", "false");
-    a.setAttribute("title", title);
-    a.setAttribute("class", "links");
-    a.setAttribute("IMDB", imdb);
-    a.setAttribute("href", "https://www.2embed.cc/embed/" + imdb);
-    a.setAttribute("target", "_blank");
-    a.click();
-  } else if (imdb && title && episode && !type) {
-    // let formatedEpisodeNumber = (episode).toLocaleString('en-US', { minimumIntegerDigits: 2, useGrouping: false });
-    let a = document.createElement("a");
-    a.setAttribute("onClick", "setUrl(this); return setVideo(this);");
-    console.log("season setall", season, "episode", episode);
-    a.setAttribute("url", `imdb=${imdb}&season=${season}&episode=${episode}`);
-    a.setAttribute("isWebSeries", "true");
-    a.setAttribute("title", title);
-    a.setAttribute("class", "links");
-    a.setAttribute("IMDB", imdb);
-    a.setAttribute(
-      "href",
-      `https://www.2embed.cc/embedtv/${imdb}&s=${season}&e=${episode}`
-    );
-    a.setAttribute("target", "_blank");
-    a.click();
-  }
-}
-
 // fetch titile of movie/webseries by its imdb id
 
 const fetchTitle = async (imdbID) => {
@@ -257,11 +223,96 @@ function episodeHighlight(cssidentification = "s1e1") {
   ).className = "episodes selected";
 }
 
-// Do multiple tasks on anchor tag click
+// === GLOBAL PLAYER CONFIGURATION ===
+const PLAYER_CONFIG = {
+  iframeId: "iframe",
+  videoContainerId: "video",
+  embedMovieUrl: (tmdb) => `https://vidsrc.su/embed/movie/${tmdb}`,
+  embedTvUrl: (tmdb, season, episode) =>
+    `https://vidsrc.su/embed/tv/${tmdb}/${season}/${episode}`,
+};
+
+// Helper to get TMDB ID from IMDb ID
+async function fetchTmdbIdFromImdb(imdbID) {
+  const tmdbApiKey = "b6b677eb7d4ec17f700e3d4dfc31d005";
+  const url = `https://api.themoviedb.org/3/find/${imdbID}?api_key=${tmdbApiKey}&language=en-US&external_source=imdb_id`;
+  try {
+    const response = await fetch(url);
+    const data = await response.json();
+    // For movies, TMDB ID is in movie_results[0].id
+    return data.movie_results && data.movie_results[0] ? data.movie_results[0].id : null;
+  } catch (error) {
+    console.error("Failed to fetch TMDB ID:", error);
+    return null;
+  }
+}
+
+// Helper to get TMDB ID from IMDb ID for TV shows
+async function fetchTmdbTvIdFromImdb(imdbID) {
+  const tmdbApiKey = "b6b677eb7d4ec17f700e3d4dfc31d005";
+  const url = `https://api.themoviedb.org/3/find/${imdbID}?api_key=${tmdbApiKey}&language=en-US&external_source=imdb_id`;
+  try {
+    const response = await fetch(url);
+    const data = await response.json();
+    // For TV shows, TMDB ID is in tv_results[0].id
+    return data.tv_results && data.tv_results[0] ? data.tv_results[0].id : null;
+  } catch (error) {
+    console.error("Failed to fetch TMDB ID for TV show:", error);
+    return null;
+  }
+}
+
+// setAll function updated to use TMDB ID for both movies and TV shows
+async function setAll(imdb, title, season, episode, type) {
+  if (imdb && title && !season && !episode && type) {
+    // Movie: get TMDB ID first
+    const tmdbId = await fetchTmdbIdFromImdb(imdb);
+    if (!tmdbId) {
+      alert("Could not find TMDB ID for this movie.");
+      return;
+    }
+    let a = document.createElement("a");
+    a.setAttribute("onClick", "setUrl(this); return setVideo(this);");
+    a.setAttribute(
+      "url",
+      `imdb=${imdb}&type=movie&title=${title.replace(/ /g, "_")}`
+    );
+    a.setAttribute("isWebSeries", "false");
+    a.setAttribute("title", title);
+    a.setAttribute("class", "links");
+    a.setAttribute("IMDB", imdb);
+    a.setAttribute("href", PLAYER_CONFIG.embedMovieUrl(tmdbId));
+    a.setAttribute("target", "_blank");
+    a.click();
+  } else if (imdb && title && episode && !type) {
+    // TV: get TMDB ID first
+    const tmdbId = await fetchTmdbTvIdFromImdb(imdb);
+    if (!tmdbId) {
+      alert("Could not find TMDB ID for this TV show.");
+      return;
+    }
+    let a = document.createElement("a");
+    a.setAttribute("onClick", "setUrl(this); return setVideo(this);");
+    console.log("season setall", season, "episode", episode);
+    a.setAttribute("url", `imdb=${imdb}&season=${season}&episode=${episode}`);
+    a.setAttribute("isWebSeries", "true");
+    a.setAttribute("title", title);
+    a.setAttribute("class", "links");
+    a.setAttribute("IMDB", imdb);
+    a.setAttribute(
+      "href",
+      PLAYER_CONFIG.embedTvUrl(tmdbId, season, episode)
+    );
+    a.setAttribute("target", "_blank");
+    a.click();
+  }
+}
+
+// fetch and set video
 
 function setVideo(element) {
-  const iframe = document.getElementById("iframe");
-  const video = document.getElementById("video");
+  const iframe = document.getElementById(PLAYER_CONFIG.iframeId);
+  const video = document.getElementById(PLAYER_CONFIG.videoContainerId);
   iframe.src = element.getAttribute("href");
   video.style.display = "block";
   const webSeriesData = document.getElementById("webSeriesData");
@@ -337,7 +388,7 @@ function setVideo(element) {
             minimumIntegerDigits: 2,
             useGrouping: false,
           });
-          episodesData += `<a class="episodes" title="${seasonsDataJSON.name + ": E" + formatedEpisodeNumber + ". " + episode.name}" cssidentification="s${seasonNumber}e${episodeNumber}" url="imdb=${imdbID}&season=${seasonNumber}&episode=${episodeNumber}&title=${seasonsDataJSON.name.replace(/ /g, "_") + "_E" + formatedEpisodeNumber + "_" + episode.name.replace(/ /g, "_")}" onClick="event.preventDefault();setVideo(this);setUrl(this); " href="https://www.2embed.cc/embedtv/${imdbID}&s=${seasonNumber}&e=${episodeNumber}">E${formatedEpisodeNumber}. ${episode.name}</a>`;
+          episodesData += `<a class="episodes" title="${seasonsDataJSON.name + ": E" + formatedEpisodeNumber + ". " + episode.name}" cssidentification="s${seasonNumber}e${episodeNumber}" url="imdb=${imdbID}&season=${seasonNumber}&episode=${episodeNumber}&title=${seasonsDataJSON.name.replace(/ /g, "_") + "_E" + formatedEpisodeNumber + "_" + episode.name.replace(/ /g, "_")}" onClick="event.preventDefault();setVideo(this);setUrl(this); " href="${PLAYER_CONFIG.embedTvUrl(showId, seasonNumber, episodeNumber)}">E${formatedEpisodeNumber}. ${episode.name}</a>`;
         }
 
         episodeContainer.innerHTML = episodesData;
