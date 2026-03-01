@@ -13,6 +13,10 @@
 - Live demo: https://netflix-1uh.pages.dev
 - CI checks: JavaScript syntax + static file integrity
 
+## Demo Card
+
+[![Netflix Ke Pitaji Demo](https://raw.githubusercontent.com/pulkitpareek18/netflix/main/netflix-ke-pitaji.gif)](https://netflix-1uh.pages.dev)
+
 
 Watch all your favourite movies, web series, TV shows and anime for free. 
 
