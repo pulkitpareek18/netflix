@@ -1,0 +1,38 @@
+name: CI
+
+on:
+  pull_request:
+  push:
+    branches:
+      - main
+
+jobs:
+  static-checks:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: "20"
+
+      - name: Validate critical files
+        run: |
+          test -f index.html
+          test -f script.js
+          test -f style.css
+          test -f manifest.json
+          test -f README.md
+
+      - name: JavaScript syntax checks
+        run: |
+          node --check script.js
+          node --check script.min.js
+
+      - name: Basic HTML sanity checks
+        run: |
+          grep -q "<title>" index.html
+          grep -q "manifest.json" index.html

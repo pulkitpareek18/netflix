@@ -1,6 +1,18 @@
 
 # NETFLIX KE PITAJI
 
+[![CI](https://github.com/pulkitpareek18/netflix/actions/workflows/ci.yml/badge.svg)](https://github.com/pulkitpareek18/netflix/actions/workflows/ci.yml)
+[![Semgrep](https://github.com/pulkitpareek18/netflix/actions/workflows/semgrep.yml/badge.svg)](https://github.com/pulkitpareek18/netflix/actions/workflows/semgrep.yml)
+![Last Commit](https://img.shields.io/github/last-commit/pulkitpareek18/netflix)
+![Stars](https://img.shields.io/github/stars/pulkitpareek18/netflix)
+
+## Release Snapshot (March 2026)
+
+- Status: Active
+- Type: Static streaming-style web app
+- Live demo: https://netflix-1uh.pages.dev
+- CI checks: JavaScript syntax + static file integrity
+
 
 Watch all your favourite movies, web series, TV shows and anime for free. 
 
@@ -65,4 +77,3 @@ If you have any new Idea or have found a bug, please don't hesitate to open a Pu
 ## Support
 
 For support, email pulkitpareekofficial@gmail.com or ask any query on Twitter.
-
