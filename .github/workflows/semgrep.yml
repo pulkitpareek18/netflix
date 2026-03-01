@@ -1,23 +1,51 @@
+name: Semgrep
+
 on:
-  pull_request: {}
+  pull_request:
   push:
     branches:
-    - main
-    - master
-    paths:
-    - .github/workflows/semgrep.yml
-  schedule:
-  # random HH:MM to avoid a load spike on GitHub Actions at 00:00
-  - cron: 18 0 * * *
-name: Semgrep
+      - main
+      - master
+
+concurrency:
+  group: semgrep-${{ github.ref }}
+  cancel-in-progress: true
+
 jobs:
   semgrep:
     name: Scan
-    runs-on: ubuntu-20.04
-    env:
-      SEMGREP_APP_TOKEN: ${{ secrets.SEMGREP_APP_TOKEN }}
-    container:
-      image: returntocorp/semgrep
+    runs-on: ubuntu-latest
+    permissions:
+      contents: read
+      security-events: write
+
     steps:
-    - uses: actions/checkout@v3
-    - run: semgrep ci
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Setup Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: "3.11"
+
+      - name: Install Semgrep
+        run: pip install semgrep
+
+      - name: Run Semgrep scan
+        run: |
+          semgrep scan \
+            --config p/javascript \
+            --config p/secrets \
+            --exclude '*.min.js' \
+            --exclude '*.gif' \
+            --exclude '*.avif' \
+            --exclude '*.jpg' \
+            --exclude '*.png' \
+            --sarif \
+            --output semgrep.sarif \
+            .
+
+      - name: Upload SARIF
+        uses: github/codeql-action/upload-sarif@v3
+        with:
+          sarif_file: semgrep.sarif
