@@ -227,9 +227,9 @@ function episodeHighlight(cssidentification = "s1e1") {
 const PLAYER_CONFIG = {
   iframeId: "iframe",
   videoContainerId: "video",
-  embedMovieUrl: (tmdb) => `https://vidsrc.su/embed/movie/${tmdb}`,
-  embedTvUrl: (tmdb, season, episode) =>
-    `https://vidsrc.su/embed/tv/${tmdb}/${season}/${episode}`,
+  embedMovieUrl: (imdb) => `https://www.2embed.cc/embed/${imdb}`,
+  embedTvUrl: (imdb, season, episode) =>
+    `https://www.2embed.cc/embedtv/${imdb}&s=${season}&e=${episode}`,
 };
 
 // Helper to get TMDB ID from IMDb ID
@@ -265,12 +265,6 @@ async function fetchTmdbTvIdFromImdb(imdbID) {
 // setAll function updated to use TMDB ID for both movies and TV shows
 async function setAll(imdb, title, season, episode, type) {
   if (imdb && title && !season && !episode && type) {
-    // Movie: get TMDB ID first
-    const tmdbId = await fetchTmdbIdFromImdb(imdb);
-    if (!tmdbId) {
-      alert("Could not find TMDB ID for this movie.");
-      return;
-    }
     let a = document.createElement("a");
     a.setAttribute("onClick", "setUrl(this); return setVideo(this);");
     a.setAttribute(
@@ -281,16 +275,10 @@ async function setAll(imdb, title, season, episode, type) {
     a.setAttribute("title", title);
     a.setAttribute("class", "links");
     a.setAttribute("IMDB", imdb);
-    a.setAttribute("href", PLAYER_CONFIG.embedMovieUrl(tmdbId));
+    a.setAttribute("href", PLAYER_CONFIG.embedMovieUrl(imdb));
     a.setAttribute("target", "_blank");
     a.click();
   } else if (imdb && title && episode && !type) {
-    // TV: get TMDB ID first
-    const tmdbId = await fetchTmdbTvIdFromImdb(imdb);
-    if (!tmdbId) {
-      alert("Could not find TMDB ID for this TV show.");
-      return;
-    }
     let a = document.createElement("a");
     a.setAttribute("onClick", "setUrl(this); return setVideo(this);");
     console.log("season setall", season, "episode", episode);
@@ -299,10 +287,7 @@ async function setAll(imdb, title, season, episode, type) {
     a.setAttribute("title", title);
     a.setAttribute("class", "links");
     a.setAttribute("IMDB", imdb);
-    a.setAttribute(
-      "href",
-      PLAYER_CONFIG.embedTvUrl(tmdbId, season, episode)
-    );
+    a.setAttribute("href", PLAYER_CONFIG.embedTvUrl(imdb, season, episode));
     a.setAttribute("target", "_blank");
     a.click();
   }
@@ -389,7 +374,7 @@ function setVideo(element) {
             minimumIntegerDigits: 2,
             useGrouping: false,
           });
-          episodesData += `<a class="episodes" title="${seasonsDataJSON.name + ": E" + formatedEpisodeNumber + ". " + episode.name}" cssidentification="s${seasonNumber}e${episodeNumber}" url="imdb=${imdbID}&season=${seasonNumber}&episode=${episodeNumber}&title=${seasonsDataJSON.name.replace(/ /g, "_") + "_E" + formatedEpisodeNumber + "_" + episode.name.replace(/ /g, "_")}" onClick="event.preventDefault();setVideo(this);setUrl(this); " href="${PLAYER_CONFIG.embedTvUrl(showId, seasonNumber, episodeNumber)}">E${formatedEpisodeNumber}. ${episode.name}</a>`;
+          episodesData += `<a class="episodes" title="${seasonsDataJSON.name + ": E" + formatedEpisodeNumber + ". " + episode.name}" cssidentification="s${seasonNumber}e${episodeNumber}" url="imdb=${imdbID}&season=${seasonNumber}&episode=${episodeNumber}&title=${seasonsDataJSON.name.replace(/ /g, "_") + "_E" + formatedEpisodeNumber + "_" + episode.name.replace(/ /g, "_")}" onClick="event.preventDefault();setVideo(this);setUrl(this); " href="${PLAYER_CONFIG.embedTvUrl(imdbID, seasonNumber, episodeNumber)}">E${formatedEpisodeNumber}. ${episode.name}</a>`;
         }
 
         episodeContainer.innerHTML = episodesData;
