@@ -59,7 +59,7 @@ function fetchAndShow() {
                       </div>
                    </a>`;
           } else if (result.qid === "tvSeries" && result.i) {
-            imageAndInfo = `<a onClick="setUrl(this); return setVideo(this);" url="imdb=${result.id}&season=1&episode=1&title=${result.l.replace(/ /g, "_")}" IMDB="${result.id}" title="${result.l}" isWebSeries="true" class="links" href="https://www.2embed.cc/embedtv/${result.id}&s=1&e=1" target="_blank">
+            imageAndInfo = `<a onClick="setUrl(this); return setVideo(this);" url="imdb=${result.id}&season=1&episode=1&title=${result.l.replace(/ /g, "_")}" IMDB="${result.id}" title="${result.l}" isWebSeries="true" class="links" href="https://www.2embed.cc/embedtv/${result.id}?s=1&e=1" target="_blank">
                       <img alt="${result.l}" src="${optimisedImageUrl(result.i.imageUrl)}">
                         <div class="info">
                           <h3>${result.l}</h3>
@@ -229,7 +229,7 @@ const PLAYER_CONFIG = {
   videoContainerId: "video",
   embedMovieUrl: (imdb) => `https://www.2embed.cc/embed/${imdb}`,
   embedTvUrl: (imdb, season, episode) =>
-    `https://www.2embed.cc/embedtv/${imdb}&s=${season}&e=${episode}`,
+    `https://www.2embed.cc/embedtv/${imdb}?s=${season}&e=${episode}`,
 };
 
 // Helper to get TMDB ID from IMDb ID
